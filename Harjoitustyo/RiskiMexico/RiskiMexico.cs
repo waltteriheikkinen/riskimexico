@@ -77,6 +77,7 @@ namespace RiskiMexico
             int silmaluku2 = RandomGen.NextInt(1, 7);
             noppa1 = LuoNoppa(silmaluku1, Screen.Right - 200, 75);
             noppa2 = LuoNoppa(silmaluku2, Screen.Right - 200, -75);
+            Timer.SingleShot(2.0, NopatVitteeoon);
 
             if (silmaluku1 + silmaluku2 == 3)
             {
@@ -89,25 +90,31 @@ namespace RiskiMexico
                 Add(arriva);
             }
 
+            if(heittoja.Value == 0)
+            {
+                if (silmaluku1 == silmaluku2)
+                {
+                    heittoja.Value += silmaluku1;
+                }
+                return;
+            }
+
             if(silmaluku1 == silmaluku2)
             {
                 heittoja.Value += silmaluku1;
             }
 
-            if (heittoja.Value != 0)
+            heittoja.Value -= 1;
+          
+            if (heittoja.Value == 0)
             {
-                heittoja.Value -= 1;
-                if (heittoja.Value == 0)
-                {
-                    Label loppu = new Label($"Peli P‰‰ttyi! Heitit {mexicot.Value} mexicoa!");
-                    loppu.TextColor = Color.White;
-                    loppu.Color = Color.Black;
-                    loppu.LifetimeLeft = TimeSpan.FromSeconds(2.0);
-                    Add(loppu);
-                    mexicot.Value = 0;
-                }
+                Label loppu = new Label($"Peli P‰‰ttyi! Heitit {mexicot.Value} mexicoa!");
+                loppu.TextColor = Color.White;
+                loppu.Color = Color.Black;
+                loppu.LifetimeLeft = TimeSpan.FromSeconds(2.0);
+                Add(loppu);
+                mexicot.Value = 0;
             }
-            Timer.SingleShot(2.0, NopatVitteeoon);
         }
 
         /// <summary>
