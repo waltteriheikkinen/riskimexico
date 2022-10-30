@@ -79,24 +79,23 @@ namespace RiskiMexico
             noppa2 = LuoNoppa(silmaluku2, Screen.Right - 200, -75);
             Timer.SingleShot(2.0, NopatVitteeoon);
 
-            if (silmaluku1 + silmaluku2 == 3)
-            {
-                mexicot.Value++;
-                Label arriva = new Label("ARRIVAA! Juo shotti :)");
-                arriva.TextColor = Color.White;
-                arriva.Color = Color.Black;
-                arriva.Y = 100;
-                arriva.LifetimeLeft = TimeSpan.FromSeconds(5.0);
-                Add(arriva);
-            }
-
             if(heittoja.Value == 0)
             {
+                if (silmaluku1 + silmaluku2 == 3)
+                {
+                    MexicoTuuletus();
+                    LopetaPeli();
+                }
                 if (silmaluku1 == silmaluku2)
                 {
                     heittoja.Value += silmaluku1;
                 }
                 return;
+            }
+
+            if (silmaluku1 + silmaluku2 == 3)
+            {
+                MexicoTuuletus();
             }
 
             if(silmaluku1 == silmaluku2)
@@ -108,13 +107,31 @@ namespace RiskiMexico
           
             if (heittoja.Value == 0)
             {
-                Label loppu = new Label($"Peli P‰‰ttyi! Heitit {mexicot.Value} mexicoa!");
-                loppu.TextColor = Color.White;
-                loppu.Color = Color.Black;
-                loppu.LifetimeLeft = TimeSpan.FromSeconds(2.0);
-                Add(loppu);
-                mexicot.Value = 0;
+                LopetaPeli();
             }
+        }
+
+
+        void MexicoTuuletus()
+        {
+            mexicot.Value++;
+            Label arriva = new Label("ARRIVAA! Juo shotti :)");
+            arriva.TextColor = Color.White;
+            arriva.Color = Color.Black;
+            arriva.Y = 100;
+            arriva.LifetimeLeft = TimeSpan.FromSeconds(5.0);
+            Add(arriva);
+        }
+
+
+        void LopetaPeli()
+        {
+            Label loppu = new Label($"Peli P‰‰ttyi! Heitit {mexicot.Value} mexicoa!");
+            loppu.TextColor = Color.White;
+            loppu.Color = Color.Black;
+            loppu.LifetimeLeft = TimeSpan.FromSeconds(2.0);
+            Add(loppu);
+            mexicot.Value = 0;
         }
 
         /// <summary>
@@ -142,120 +159,78 @@ namespace RiskiMexico
 
             if (silmaluku == 1)
             {
-                PhysicsObject silma1 = LuoSilma(koko);
+                PhysicsObject silma1 = LuoSilma(koko, x, y);
                 noppa.Add(silma1);
-                silma1.X = x;
-                silma1.Y = y;
             }
             if (silmaluku == 2)
             {
-                PhysicsObject silma1 = LuoSilma(koko);
+                PhysicsObject silma1 = LuoSilma(koko, x + 1.0 / 4 * koko, y + 1.0 / 4 * koko);
                 noppa.Add(silma1);
-                silma1.X = x + 1.0 / 4 * koko;
-                silma1.Y = y + 1.0 / 4 * koko;
 
-                PhysicsObject silma2 = LuoSilma(koko);
+                PhysicsObject silma2 = LuoSilma(koko, x + -1.0 / 4 * koko, y + -1.0 / 4 * koko);
                 noppa.Add(silma2);
-                silma2.X = x + -1.0 / 4 * koko;
-                silma2.Y = y + -1.0 / 4 * koko;
             }
             if (silmaluku == 3)
             {
-                PhysicsObject silma1 = LuoSilma(koko);
+                PhysicsObject silma1 = LuoSilma(koko, x + 1.0 / 4 * koko, y + 1.0 / 4 * koko);
                 noppa.Add(silma1);
-                silma1.X = x + 1.0 / 4 * koko;
-                silma1.Y = y + 1.0 / 4 * koko;
 
-                PhysicsObject silma2 = LuoSilma(koko);
+                PhysicsObject silma2 = LuoSilma(koko, x + -1.0 / 4 * koko, y + -1.0 / 4 * koko);
                 noppa.Add(silma2);
-                silma2.X = x + -1.0 / 4 * koko;
-                silma2.Y = y + -1.0 / 4 * koko;
 
-                PhysicsObject silma3 = LuoSilma(koko);
+                PhysicsObject silma3 = LuoSilma(koko, x, y);
                 noppa.Add(silma3);
-                silma3.X = x;
-                silma3.Y = y;
             }
             if (silmaluku == 4)
             {
-                PhysicsObject silma1 = LuoSilma(koko);
+                PhysicsObject silma1 = LuoSilma(koko, x + 1.0 / 4 * koko, y + 1.0 / 4 * koko);
                 noppa.Add(silma1);
-                silma1.X = x + 1.0 / 4 * koko;
-                silma1.Y = y + 1.0 / 4 * koko;
 
-                PhysicsObject silma2 = LuoSilma(koko);
+                PhysicsObject silma2 = LuoSilma(koko, x + -1.0 / 4 * koko, y + -1.0 / 4 * koko);
                 noppa.Add(silma2);
-                silma2.X = x + -1.0 / 4 * koko;
-                silma2.Y = y + -1.0 / 4 * koko;
 
-                PhysicsObject silma3 = LuoSilma(koko);
+                PhysicsObject silma3 = LuoSilma(koko, x + 1.0 / 4 * koko, y + -1.0 / 4 * koko);
                 noppa.Add(silma3);
-                silma3.X = x + 1.0 / 4 * koko;
-                silma3.Y = y + -1.0 / 4 * koko;
 
-                PhysicsObject silma4 = LuoSilma(koko);
+                PhysicsObject silma4 = LuoSilma(koko, x + -1.0 / 4 * koko, y + 1.0 / 4 * koko);
                 noppa.Add(silma4);
-                silma4.X = x + -1.0 / 4 * koko;
-                silma4.Y = y + 1.0 / 4 * koko;
             }
             if (silmaluku == 5)
             {
-                PhysicsObject silma1 = LuoSilma(koko);
+                PhysicsObject silma1 = LuoSilma(koko, x + 1.0 / 4 * koko, y + 1.0 / 4 * koko);
                 noppa.Add(silma1);
-                silma1.X = x + 1.0 / 4 * koko;
-                silma1.Y = y + 1.0 / 4 * koko;
 
-                PhysicsObject silma2 = LuoSilma(koko);
+                PhysicsObject silma2 = LuoSilma(koko, x + -1.0 / 4 * koko, y + -1.0 / 4 * koko);
                 noppa.Add(silma2);
-                silma2.X = x + -1.0 / 4 * koko;
-                silma2.Y = y + -1.0 / 4 * koko;
 
-                PhysicsObject silma3 = LuoSilma(koko);
+                PhysicsObject silma3 = LuoSilma(koko, x + 1.0 / 4 * koko, y + -1.0 / 4 * koko);
                 noppa.Add(silma3);
-                silma3.X = x + 1.0 / 4 * koko;
-                silma3.Y = y + -1.0 / 4 * koko;
 
-                PhysicsObject silma4 = LuoSilma(koko);
+                PhysicsObject silma4 = LuoSilma(koko, x + -1.0 / 4 * koko, y + 1.0 / 4 * koko);
                 noppa.Add(silma4);
-                silma4.X = x + -1.0 / 4 * koko;
-                silma4.Y = y + 1.0 / 4 * koko;
                 
-                PhysicsObject silma5 = LuoSilma(koko);
+                PhysicsObject silma5 = LuoSilma(koko, x, y);
                 noppa.Add(silma5);
-                silma5.X = x;
-                silma5.Y = y;
             }
             if (silmaluku == 6)
             {
-                PhysicsObject silma1 = LuoSilma(koko);
+                PhysicsObject silma1 = LuoSilma(koko, x + 1.0 / 4 * koko, y + 1.0 / 4 * koko);
                 noppa.Add(silma1);
-                silma1.X = x + 1.0 / 4 * koko;
-                silma1.Y = y + 1.0 / 4 * koko;
 
-                PhysicsObject silma2 = LuoSilma(koko);
+                PhysicsObject silma2 = LuoSilma(koko, x + -1.0 / 4 * koko, y + -1.0 / 4 * koko);
                 noppa.Add(silma2);
-                silma2.X = x + -1.0 / 4 * koko;
-                silma2.Y = y + -1.0 / 4 * koko;
 
-                PhysicsObject silma3 = LuoSilma(koko);
+                PhysicsObject silma3 = LuoSilma(koko, x + 1.0 / 4 * koko, y + -1.0 / 4 * koko);
                 noppa.Add(silma3);
-                silma3.X = x + 1.0 / 4 * koko;
-                silma3.Y = y + -1.0 / 4 * koko;
 
-                PhysicsObject silma4 = LuoSilma(koko);
+                PhysicsObject silma4 = LuoSilma(koko, x + -1.0 / 4 * koko, y + 1.0 / 4 * koko);
                 noppa.Add(silma4);
-                silma4.X = x + -1.0 / 4 * koko;
-                silma4.Y = y + 1.0 / 4 * koko;
 
-                PhysicsObject silma5 = LuoSilma(koko);
+                PhysicsObject silma5 = LuoSilma(koko, x, y + 1.0 / 4 * koko);
                 noppa.Add(silma5);
-                silma5.X = x;
-                silma5.Y = y + 1.0 / 4 * koko;
 
-                PhysicsObject silma6 = LuoSilma(koko);
+                PhysicsObject silma6 = LuoSilma(koko, x, y + -1.0 / 4 * koko);
                 noppa.Add(silma6);
-                silma6.X = x;
-                silma6.Y = y + -1.0 / 4 * koko;
             }
             return noppa;
         }
@@ -266,11 +241,13 @@ namespace RiskiMexico
         /// </summary>
         /// <param name="koko">vakio joka m‰‰ritt‰‰ silm‰luvun muodostavien pallojen koon</param>
         /// <returns>palauttaa pallon</returns>
-        PhysicsObject LuoSilma(int koko)
+        PhysicsObject LuoSilma(int koko, double x, double y)
         {
             PhysicsObject silma = new PhysicsObject(koko / 5.0, koko / 5.0, Shape.Circle);
             silma.Color = Color.Red;
             Add(silma);
+            silma.X = x;
+            silma.Y = y;
             return silma;
         }
 
