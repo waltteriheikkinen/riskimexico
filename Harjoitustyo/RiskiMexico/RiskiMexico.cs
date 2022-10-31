@@ -5,6 +5,7 @@ using Jypeli.Widgets;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace RiskiMexico
 {
@@ -19,7 +20,40 @@ namespace RiskiMexico
         {
             Camera.ZoomToLevel();
             AsetaOhjaimet();
-            LuoLaskurit();  
+            LuoLaskurit();
+            LuoHeittoMittari();
+        }
+
+
+        void LuoHeittoMittari()
+        {
+            PhysicsObject palkki1 = LuoPalkki(0, Color.Lime);
+            PhysicsObject palkki2 = LuoPalkki(-100, Color.Yellow);
+            PhysicsObject palkki3 = LuoPalkki(-200, Color.Orange);
+            PhysicsObject palkki4 = LuoPalkki(-300, Color.Red);
+            PhysicsObject palkki5 = LuoPalkki(100, Color.Yellow);
+            PhysicsObject palkki6 = LuoPalkki(200, Color.Orange);
+            PhysicsObject palkki7 = LuoPalkki(300, Color.Red);
+
+            PhysicsObject osoitin = new PhysicsObject(25, 50);
+            osoitin.IgnoresCollisionResponse = true;
+            osoitin.Y = Level.Bottom + 100;
+            osoitin.Color = Color.Black;
+            osoitin.Oscillate(Vector.UnitX, 350, 0.7);
+            this.Add(osoitin, 1);
+
+        }
+
+        PhysicsObject LuoPalkki(double x, Color vari)
+        {
+            PhysicsObject mittari = new PhysicsObject(100, 50);
+            mittari.Y = Level.Bottom + 100;
+            mittari.X = x;
+            mittari.IgnoresCollisionResponse = true;
+            mittari.Color = vari;
+            this.Add(mittari);
+            return mittari;
+
         }
 
 
