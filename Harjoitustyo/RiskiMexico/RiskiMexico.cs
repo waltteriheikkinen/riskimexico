@@ -6,6 +6,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Security.Cryptography.X509Certificates;
 
 namespace RiskiMexico
 {
@@ -13,9 +14,10 @@ namespace RiskiMexico
     {
         private PhysicsObject noppa1;
         private PhysicsObject noppa2;
+        private PhysicsObject osoitin;
         private IntMeter mexicot;
         private IntMeter heittoja;
-        //private IntMeter jakovirheet;
+        private IntMeter jakovirheet;
         public override void Begin()
         {
             Camera.ZoomToLevel();
@@ -25,26 +27,25 @@ namespace RiskiMexico
         }
 
 
-        void LuoHeittoMittari()
+        public void LuoHeittoMittari()
         {
-            PhysicsObject palkki1 = LuoPalkki(0, Color.Lime);
-            PhysicsObject palkki2 = LuoPalkki(-100, Color.Yellow);
-            PhysicsObject palkki3 = LuoPalkki(-200, Color.Orange);
-            PhysicsObject palkki4 = LuoPalkki(-300, Color.Red);
-            PhysicsObject palkki5 = LuoPalkki(100, Color.Yellow);
-            PhysicsObject palkki6 = LuoPalkki(200, Color.Orange);
-            PhysicsObject palkki7 = LuoPalkki(300, Color.Red);
+            LuoPalkki(0, Color.Lime);
+            LuoPalkki(-100, Color.Yellow);
+            LuoPalkki(-200, Color.Orange);
+            LuoPalkki(-300, Color.Red);
+            LuoPalkki(100, Color.Yellow);
+            LuoPalkki(200, Color.Orange);
+            LuoPalkki(300, Color.Red);
 
-            PhysicsObject osoitin = new PhysicsObject(25, 50);
+            osoitin = new PhysicsObject(25, 50);
             osoitin.IgnoresCollisionResponse = true;
             osoitin.Y = Level.Bottom + 100;
             osoitin.Color = Color.Black;
-            osoitin.Oscillate(Vector.UnitX, 350, 0.7);
-            this.Add(osoitin, 1);
-
+            osoitin.Oscillate(Vector.UnitX, 337.5, 0.2);
+            this.Add(osoitin);
         }
 
-        PhysicsObject LuoPalkki(double x, Color vari)
+        public PhysicsObject LuoPalkki(double x, Color vari)
         {
             PhysicsObject mittari = new PhysicsObject(100, 50);
             mittari.Y = Level.Bottom + 100;
@@ -53,40 +54,32 @@ namespace RiskiMexico
             mittari.Color = vari;
             this.Add(mittari);
             return mittari;
-
         }
 
 
-        void NopatVitteeoon()
+        public void NopatVitteeoon()
         {
             noppa1.Hit(new Vector(0, -50000));
             noppa2.Hit(new Vector(0, -50000));
         }
 
-        void AsetaOhjaimet()
+        public void AsetaOhjaimet()
         {
             Keyboard.Listen(Key.Escape, ButtonState.Pressed, ConfirmExit, "Lopeta peli");
             Keyboard.Listen(Key.F1, ButtonState.Pressed, ShowControlHelp, "N‰yt‰ ohjeet");
             Keyboard.Listen(Key.Space, ButtonState.Pressed, HeitaNoppaa, "Heit‰ noppaa");
-            Keyboard.Listen(Key.Up, ButtonState.Pressed, UusiHeitto, "Valmistaudu uuteen heittoon");
         }
 
 
-        void LuoLaskurit()
+        public void LuoLaskurit()
         {
-            mexicot = LuoPistelaskuri("Mexicot: ", Screen.Left + 1.0 / 3 * Screen.Width);
-            heittoja = LuoPistelaskuri("Heittoja: ", Screen.Left + 2.0 / 3 * Screen.Width);
-            //jakovirheet = LuoPistelaskuri("Jakovirheet: ", Screen.Right - 200);
+            mexicot = LuoPistelaskuri("Mexicot: ", Screen.Left + 1.0 / 4 * Screen.Width);
+            heittoja = LuoPistelaskuri("Heittoja: ", 0);
+            jakovirheet = LuoPistelaskuri("Jakovirheet: ", Screen.Right - 1.0 / 4 * Screen.Width);
         }
 
 
-        void UusiHeitto()
-        {
-            noppa1.Destroy();
-        }
-
-
-        IntMeter LuoPistelaskuri(string otsikko, double sijainti)
+        public IntMeter LuoPistelaskuri(string otsikko, double sijainti)
         {
             IntMeter pistelaskuri = new IntMeter(0);
 
@@ -105,13 +98,39 @@ namespace RiskiMexico
         }
 
 
-        void HeitaNoppaa()
+        public void HeitaNoppaa()
         {
             int silmaluku1 = RandomGen.NextInt(1, 7);
             int silmaluku2 = RandomGen.NextInt(1, 7);
             noppa1 = LuoNoppa(silmaluku1, Screen.Right - 200, 75);
             noppa2 = LuoNoppa(silmaluku2, Screen.Right - 200, -75);
+
+
+            if (-50 < osoitin.X && osoitin.X < 50)
+            {
+                LyoNoppaa(-12000, -10000, 10000);
+            }
+            if ((-150 <= osoitin.X && osoitin.X <= - 50) || (50 <= osoitin.X && osoitin.X <= 150))
+            {
+                LyoNoppaa(-20000, -15000, 15000);
+            }
+            if ((-250 <= osoitin.X && osoitin.X <= -150) || (150 <= osoitin.X && osoitin.X <= 250))
+            {
+                LyoNoppaa(-30000, -15000, 15000);
+            }
+            if ((-350 <= osoitin.X && osoitin.X <= -250) || (250 <= osoitin.X && osoitin.X <= 350))
+            {
+                LyoNoppaa(-40000, -15000, 15000);
+            }           
+            //noppa1.Hit(new Vector(0, 13000)); T‰‰ menee yli yl‰reunast
+            noppa1.AngularVelocity = RandomGen.NextInt(-7, 7);
+            noppa2.AngularVelocity = RandomGen.NextInt(-7, 7);
+
+            if (noppa1.X < Screen.Left) jakovirheet.Value++;
+
             Timer.SingleShot(2.0, NopatVitteeoon);
+
+            
 
             if(heittoja.Value == 0)
             {
@@ -146,7 +165,16 @@ namespace RiskiMexico
         }
 
 
-        void MexicoTuuletus()
+        public void LyoNoppaa(int voima, int tuurimin, int tuurimax)
+        {
+            noppa1.Hit(new Vector(voima, 0));
+            noppa2.Hit(new Vector(voima, 0));
+            noppa1.Hit(new Vector(RandomGen.NextInt(tuurimin, tuurimax), RandomGen.NextInt(tuurimin, tuurimax)));
+            noppa2.Hit(new Vector(RandomGen.NextInt(tuurimin, tuurimax), RandomGen.NextInt(tuurimin, tuurimax)));
+        }
+
+
+        public void MexicoTuuletus()
         {
             mexicot.Value++;
             Label arriva = new Label("ARRIVAA! Juo shotti :)");
@@ -158,7 +186,7 @@ namespace RiskiMexico
         }
 
 
-        void LopetaPeli()
+        public void LopetaPeli()
         {
             Label loppu = new Label($"Peli P‰‰ttyi! Heitit {mexicot.Value} mexicoa!");
             loppu.TextColor = Color.White;
@@ -174,7 +202,7 @@ namespace RiskiMexico
         /// <param name="koko">Nopan sivun pituus</param>
         /// <param name="silmaluku">Nopan osoittama silmaluku</param>
         /// <returns></returns>
-        PhysicsObject LuoNoppa(int silmaluku, double x, double y)
+        public PhysicsObject LuoNoppa(int silmaluku, double x, double y)
         {
             int koko = 100;
             PhysicsObject noppa = new PhysicsObject(koko, koko, Shape.Rectangle);
@@ -186,10 +214,6 @@ namespace RiskiMexico
             noppa.LinearDamping = 3;
             noppa.AngularDamping = 1;
             this.Add(noppa);
-
-            noppa.Hit(new Vector(-8000, 0));
-            noppa.Hit(RandomGen.NextVector(0, 1000));
-            noppa.AngularVelocity = RandomGen.NextInt(-5, 5);
 
             if (silmaluku == 1)
             {
@@ -275,7 +299,7 @@ namespace RiskiMexico
         /// </summary>
         /// <param name="koko">vakio joka m‰‰ritt‰‰ silm‰luvun muodostavien pallojen koon</param>
         /// <returns>palauttaa pallon</returns>
-        PhysicsObject LuoSilma(int koko, double x, double y)
+        public PhysicsObject LuoSilma(int koko, double x, double y)
         {
             PhysicsObject silma = new PhysicsObject(koko / 5.0, koko / 5.0, Shape.Circle);
             silma.Color = Color.Red;
