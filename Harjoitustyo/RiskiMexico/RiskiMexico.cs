@@ -22,6 +22,7 @@ namespace RiskiMexico
         private IntMeter heitot;
         private int silmaluku1;
         private int silmaluku2;
+        private List<string> viimeheitot = new List<string>();
         public override void Begin()
         {
             Camera.ZoomToLevel();
@@ -100,6 +101,11 @@ namespace RiskiMexico
 
         public void HeitaNoppaa()
         {
+            if (heitot.Value > 0)
+            {
+                if (noppa1.Y > Screen.Bottom) return;
+            }
+
             silmaluku1 = RandomGen.NextInt(1, 7);
             silmaluku2 = RandomGen.NextInt(1, 7);
             noppa1 = LuoNoppa(silmaluku1, Screen.Right - 200, 75);
@@ -123,7 +129,7 @@ namespace RiskiMexico
             {
                 LyoNoppaa(-40000, -15000, 15000);
             }           
-            //noppa1.Hit(new Vector(0, 13000)); T‰‰ menee yli yl‰reunast
+            
             noppa1.AngularVelocity = RandomGen.NextInt(-8, 8);
             noppa2.AngularVelocity = RandomGen.NextInt(-8, 8);
 
@@ -135,16 +141,16 @@ namespace RiskiMexico
         public void NopatPysahtynyt()
         {
             int vanhatjakovirheet = jakovirheet.Value;
-            if (noppa1.X < Screen.Left || noppa1.Y > Screen.Top || noppa1.Y < Screen.Bottom)
+            if (noppa1.X < Screen.Left - 20 || noppa1.Y > Screen.Top + 20 || noppa1.Y < Screen.Bottom - 20)
                 jakovirheet.Value++;
-            if (noppa2.X < Screen.Left || noppa2.Y > Screen.Top || noppa2.Y < Screen.Bottom)
+            if (noppa2.X < Screen.Left - 20 || noppa2.Y > Screen.Top + 20 || noppa2.Y < Screen.Bottom - 20)
                 jakovirheet.Value++;
             if (jakovirheet.Value >= 3) JakovirheRankku();
 
             if(vanhatjakovirheet == jakovirheet.Value) PaivitaLaskurit();
 
-            noppa1.Hit(new Vector(0, -50000));
-            noppa2.Hit(new Vector(0, -50000));
+             noppa1.Hit(new Vector(0, -50000));
+             noppa2.Hit(new Vector(0, -50000));
         }
 
 
@@ -160,12 +166,29 @@ namespace RiskiMexico
         }
         public void PaivitaLaskurit()
         {
-            //TODO: kolme samaa lukua putkeen! T‰‰ vois menn‰ taulukolla.
+            
+            if (silmaluku1 >= silmaluku2)
+            {
+                string tulos = string.Join(" ja ", silmaluku1, silmaluku2);
+                viimeheitot.Insert(0, tulos);
+            }
+            else
+            {
+                string tulos = string.Join(" ja ", silmaluku2, silmaluku1);
+                viimeheitot.Insert(0, tulos);
+            }
+            //TODO: kaatuu varmaa koska listan pituus ei riit‰ vertailemaan
+            if (viimeheitot.Count >= 3)
+            {
+                if (viimeheitot[0] == viimeheitot[1] && viimeheitot[0] == viimeheitot[2])
+                    MexicoTuuletus($"Heitit kolme kertaa {viimeheitot[0]} putkeen.");
+            }
+            
             if (heittoja.Value == 0)
             {
                 if (silmaluku1 + silmaluku2 == 3)
                 {
-                    MexicoTuuletus();
+                    MexicoTuuletus("Heitit mexicon!");
                     LopetaPeli();
                 }
                 if (silmaluku1 == silmaluku2)
@@ -177,7 +200,7 @@ namespace RiskiMexico
 
             if (silmaluku1 + silmaluku2 == 3)
             {
-                MexicoTuuletus();
+                MexicoTuuletus("Heitit mexicon!");
             }
 
             if (silmaluku1 == silmaluku2)
@@ -203,10 +226,10 @@ namespace RiskiMexico
         }
 
 
-        public void MexicoTuuletus()
+        public void MexicoTuuletus(string tapahtuma)
         {
             mexicot.Value++;
-            Label arriva = new Label("ARRIVAA! Juo shotti :)");
+            Label arriva = new Label($"ARRIVAA! {tapahtuma} Juo shotti :)");
             arriva.TextColor = Color.White;
             arriva.Color = Color.Black;
             arriva.Y = 100;
@@ -220,10 +243,10 @@ namespace RiskiMexico
             Label loppu = new Label($"Peli P‰‰ttyi! Heitit {mexicot.Value} mexicoa!");
             loppu.TextColor = Color.White;
             loppu.Color = Color.Black;
-            loppu.LifetimeLeft = TimeSpan.FromSeconds(2.0);
+            loppu.LifetimeLeft = TimeSpan.FromSeconds(5.0);
             Add(loppu);
             mexicot.Value = 0;
-            //jakovirheet.Value = 0;
+            jakovirheet.Value = 0;
         }
 
         /// <summary>
