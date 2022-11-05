@@ -2,6 +2,7 @@ using Jypeli;
 using Jypeli.Assets;
 using Jypeli.Controls;
 using Jypeli.Widgets;
+using Silk.NET.OpenGL;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -18,6 +19,8 @@ namespace RiskiMexico
         private IntMeter mexicot;
         private IntMeter heittoja;
         private IntMeter jakovirheet;
+        private int silmaluku1;
+        private int silmaluku2;
         public override void Begin()
         {
             Camera.ZoomToLevel();
@@ -57,11 +60,6 @@ namespace RiskiMexico
         }
 
 
-        public void NopatVitteeoon()
-        {
-            noppa1.Hit(new Vector(0, -50000));
-            noppa2.Hit(new Vector(0, -50000));
-        }
 
         public void AsetaOhjaimet()
         {
@@ -100,8 +98,8 @@ namespace RiskiMexico
 
         public void HeitaNoppaa()
         {
-            int silmaluku1 = RandomGen.NextInt(1, 7);
-            int silmaluku2 = RandomGen.NextInt(1, 7);
+            silmaluku1 = RandomGen.NextInt(1, 7);
+            silmaluku2 = RandomGen.NextInt(1, 7);
             noppa1 = LuoNoppa(silmaluku1, Screen.Right - 200, 75);
             noppa2 = LuoNoppa(silmaluku2, Screen.Right - 200, -75);
 
@@ -126,13 +124,41 @@ namespace RiskiMexico
             noppa1.AngularVelocity = RandomGen.NextInt(-7, 7);
             noppa2.AngularVelocity = RandomGen.NextInt(-7, 7);
 
-            if (noppa1.X < Screen.Left) jakovirheet.Value++;
+            Timer.SingleShot(2.0, NopatPysahtynyt);
 
-            Timer.SingleShot(2.0, NopatVitteeoon);
+        }
 
-            
 
-            if(heittoja.Value == 0)
+        public void NopatPysahtynyt()
+        {
+            int vanhatjakovirheet = jakovirheet.Value;
+            if (noppa1.X < Screen.Left || noppa1.Y > Screen.Top || noppa1.Y < Screen.Bottom)
+                jakovirheet.Value++;
+            if (noppa2.X < Screen.Left || noppa2.Y > Screen.Top || noppa2.Y < Screen.Bottom)
+                jakovirheet.Value++;
+            if (jakovirheet.Value >= 3) JakovirheRankku();
+
+            if(vanhatjakovirheet == jakovirheet.Value) PaivitaLaskurit();
+
+            noppa1.Hit(new Vector(0, -50000));
+            noppa2.Hit(new Vector(0, -50000));
+        }
+
+
+        public void JakovirheRankku()
+        {
+            jakovirheet.Value = jakovirheet.Value - 3;
+            Label rankku = new Label("Jakovirheet t‰ynn‰! Suorita rangaistus.");
+            rankku.TextColor = Color.White;
+            rankku.Color = Color.Black;
+            rankku.Y = 100;
+            rankku.LifetimeLeft = TimeSpan.FromSeconds(5.0);
+            Add(rankku);
+        }
+        public void PaivitaLaskurit()
+        {
+            //TODO: kolme samaa lukua putkeen! T‰‰ vois menn‰ taulukolla.
+            if (heittoja.Value == 0)
             {
                 if (silmaluku1 + silmaluku2 == 3)
                 {
@@ -151,13 +177,13 @@ namespace RiskiMexico
                 MexicoTuuletus();
             }
 
-            if(silmaluku1 == silmaluku2)
+            if (silmaluku1 == silmaluku2)
             {
                 heittoja.Value += silmaluku1;
             }
 
             heittoja.Value -= 1;
-          
+
             if (heittoja.Value == 0)
             {
                 LopetaPeli();
@@ -194,6 +220,7 @@ namespace RiskiMexico
             loppu.LifetimeLeft = TimeSpan.FromSeconds(2.0);
             Add(loppu);
             mexicot.Value = 0;
+            jakovirheet.Value = 0;
         }
 
         /// <summary>
