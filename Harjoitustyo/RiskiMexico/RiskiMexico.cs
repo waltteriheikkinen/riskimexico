@@ -19,6 +19,7 @@ namespace RiskiMexico
         private IntMeter mexicot;
         private IntMeter heittoja;
         private IntMeter jakovirheet;
+        private IntMeter heitot;
         private int silmaluku1;
         private int silmaluku2;
         public override void Begin()
@@ -44,7 +45,7 @@ namespace RiskiMexico
             osoitin.IgnoresCollisionResponse = true;
             osoitin.Y = Level.Bottom + 100;
             osoitin.Color = Color.Black;
-            osoitin.Oscillate(Vector.UnitX, 337.5, 0.2);
+            osoitin.Oscillate(Vector.UnitX, 337.5, 0.6);
             this.Add(osoitin);
         }
 
@@ -74,6 +75,7 @@ namespace RiskiMexico
             mexicot = LuoPistelaskuri("Mexicot: ", Screen.Left + 1.0 / 4 * Screen.Width);
             heittoja = LuoPistelaskuri("Heittoja: ", 0);
             jakovirheet = LuoPistelaskuri("Jakovirheet: ", Screen.Right - 1.0 / 4 * Screen.Width);
+            heitot = LuoPistelaskuri("Heitot: ", Screen.Right - 70);
         }
 
 
@@ -102,6 +104,7 @@ namespace RiskiMexico
             silmaluku2 = RandomGen.NextInt(1, 7);
             noppa1 = LuoNoppa(silmaluku1, Screen.Right - 200, 75);
             noppa2 = LuoNoppa(silmaluku2, Screen.Right - 200, -75);
+            heitot.Value++;
 
 
             if (-50 < osoitin.X && osoitin.X < 50)
@@ -110,19 +113,19 @@ namespace RiskiMexico
             }
             if ((-150 <= osoitin.X && osoitin.X <= - 50) || (50 <= osoitin.X && osoitin.X <= 150))
             {
-                LyoNoppaa(-20000, -15000, 15000);
+                LyoNoppaa(-18500, -11000, 11000);
             }
             if ((-250 <= osoitin.X && osoitin.X <= -150) || (150 <= osoitin.X && osoitin.X <= 250))
             {
-                LyoNoppaa(-30000, -15000, 15000);
+                LyoNoppaa(-27000, -15000, 15000);
             }
             if ((-350 <= osoitin.X && osoitin.X <= -250) || (250 <= osoitin.X && osoitin.X <= 350))
             {
                 LyoNoppaa(-40000, -15000, 15000);
             }           
             //noppa1.Hit(new Vector(0, 13000)); Tää menee yli yläreunast
-            noppa1.AngularVelocity = RandomGen.NextInt(-7, 7);
-            noppa2.AngularVelocity = RandomGen.NextInt(-7, 7);
+            noppa1.AngularVelocity = RandomGen.NextInt(-8, 8);
+            noppa2.AngularVelocity = RandomGen.NextInt(-8, 8);
 
             Timer.SingleShot(2.0, NopatPysahtynyt);
 
@@ -220,7 +223,7 @@ namespace RiskiMexico
             loppu.LifetimeLeft = TimeSpan.FromSeconds(2.0);
             Add(loppu);
             mexicot.Value = 0;
-            jakovirheet.Value = 0;
+            //jakovirheet.Value = 0;
         }
 
         /// <summary>
@@ -239,7 +242,7 @@ namespace RiskiMexico
             noppa.KineticFriction = 0.6;
             noppa.Restitution = 0.5;
             noppa.LinearDamping = 3;
-            noppa.AngularDamping = 1;
+            noppa.AngularDamping = 2;
             this.Add(noppa);
 
             if (silmaluku == 1)
