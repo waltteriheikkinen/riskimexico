@@ -32,6 +32,9 @@ namespace RiskiMexico
         }
 
 
+        /// <summary>
+        /// Aliohjelmassa luodaan asteittainen mittari nopan heittoa varten. 
+        /// </summary>
         public void LuoHeittoMittari()
         {
             LuoPalkki(0, Color.Lime);
@@ -50,6 +53,14 @@ namespace RiskiMexico
             this.Add(osoitin);
         }
 
+
+        /// <summary>
+        /// Aliohjelmassa luodaan eri v‰riset palkit heittomittariin. 
+        /// V‰ri kuvastaa haluttua heittopaikkaa.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="vari"></param>
+        /// <returns></returns>
         public PhysicsObject LuoPalkki(double x, Color vari)
         {
             PhysicsObject mittari = new PhysicsObject(100, 50);
@@ -62,7 +73,9 @@ namespace RiskiMexico
         }
 
 
-
+        /// <summary>
+        /// Aliohjelmassa m‰‰ritell‰‰n pelin ohjaamiseen tarvittavat n‰pp‰imet.
+        /// </summary>
         public void AsetaOhjaimet()
         {
             Keyboard.Listen(Key.Escape, ButtonState.Pressed, ConfirmExit, "Lopeta peli");
@@ -71,15 +84,24 @@ namespace RiskiMexico
         }
 
 
+        /// <summary>
+        /// Aliohjelmassa luodaan pelin tarvitsemat laskurit.
+        /// </summary>
         public void LuoLaskurit()
         {
             mexicot = LuoPistelaskuri("Mexicot: ", Screen.Left + 1.0 / 4 * Screen.Width);
             heittoja = LuoPistelaskuri("Heittoja: ", 0);
             jakovirheet = LuoPistelaskuri("Jakovirheet: ", Screen.Right - 1.0 / 4 * Screen.Width);
-            heitot = LuoPistelaskuri("Heitot: ", Screen.Right - 70);
+            heitot = LuoPistelaskuri("Heitot: ", Screen.Right + 70);
         }
 
 
+        /// <summary>
+        /// Aliohjelmassa m‰‰ritell‰‰n halutun laskurin sijainti sek‰ otsikko.
+        /// </summary>
+        /// <param name="otsikko">Teksti joka on pistelaskurissa</param>
+        /// <param name="sijainti">Pistelaskurin sijainti</param>
+        /// <returns>Palauttaa valmiin laskurin</returns>
         public IntMeter LuoPistelaskuri(string otsikko, double sijainti)
         {
             IntMeter pistelaskuri = new IntMeter(0);
@@ -99,6 +121,9 @@ namespace RiskiMexico
         }
 
 
+        /// <summary>
+        /// Aliohjelmassa luodaan nopat ja heitet‰‰n niit‰.
+        /// </summary>
         public void HeitaNoppaa()
         {
             if (heitot.Value > 0)
@@ -138,6 +163,11 @@ namespace RiskiMexico
         }
 
 
+        /// <summary>
+        /// Aliohjelmassa tarkistetaan ensin onko heitossa tapahtunut jakovirhe.
+        /// Jos jakovirherangaistuksen ehdot t‰yttyv‰t, siirryt‰‰n jakovirherankku aliohjelmaan.
+        /// Jos jakovirheit‰ ei ole tullut, siirryt‰‰n p‰ivitt‰m‰‰n laskurit.
+        /// </summary>
         public void NopatPysahtynyt()
         {
             int vanhatjakovirheet = jakovirheet.Value;
@@ -154,6 +184,9 @@ namespace RiskiMexico
         }
 
 
+        /// <summary>
+        /// Aliohjelmassa luodaan n‰ytˆlle teksti, joka ohjeistaa suorittamaan jakovirherangaistuksen.
+        /// </summary>
         public void JakovirheRankku()
         {
             jakovirheet.Value = jakovirheet.Value - 3;
@@ -164,6 +197,11 @@ namespace RiskiMexico
             rankku.LifetimeLeft = TimeSpan.FromSeconds(5.0);
             Add(rankku);
         }
+
+
+        /// <summary>
+        /// Aliohjelmassa p‰ivitet‰‰n peliss‰ tarvittavien laskurien arvot.
+        /// </summary>
         public void PaivitaLaskurit()
         {
             
@@ -177,7 +215,7 @@ namespace RiskiMexico
                 string tulos = string.Join(" ja ", silmaluku2, silmaluku1);
                 viimeheitot.Insert(0, tulos);
             }
-            //TODO: kaatuu varmaa koska listan pituus ei riit‰ vertailemaan
+  
             if (viimeheitot.Count >= 3)
             {
                 if (viimeheitot[0] == viimeheitot[1] && viimeheitot[0] == viimeheitot[2])
@@ -217,6 +255,13 @@ namespace RiskiMexico
         }
 
 
+        /// <summary>
+        /// Aliohjelmassa m‰‰ritet‰‰n nopan heiton voimakkuus ja
+        /// lis‰ksi noppaan vaikuttaa satunnaiset voimat.
+        /// </summary>
+        /// <param name="voima">Kuinka kovaa noppaa heitet‰‰n</param>
+        /// <param name="tuurimin">Satunnaisesti luodun vektorin pienin mahdollinen arvo</param>
+        /// <param name="tuurimax">Satunnaisesti luodun vektorin suurin mahdollinen arvo</param>
         public void LyoNoppaa(int voima, int tuurimin, int tuurimax)
         {
             noppa1.Hit(new Vector(voima, 0));
@@ -226,6 +271,12 @@ namespace RiskiMexico
         }
 
 
+        /// <summary>
+        /// Aliohjelmassa luodaan n‰ytˆlle teksit, joka ohjeistaa miten toimitaan
+        /// jos pelaaja tekee shotin arvoisen suorituksen. Lis‰ksi n‰ytˆll‰ kerrotaan
+        /// miksi pelaaja joutuu juomaan shotin.
+        /// </summary>
+        /// <param name="tapahtuma">Syy shotin juomiseen</param>
         public void MexicoTuuletus(string tapahtuma)
         {
             mexicot.Value++;
@@ -238,6 +289,10 @@ namespace RiskiMexico
         }
 
 
+        /// <summary>
+        /// Aliohjelmassa nollataan laskurit ja kerrotaan pelaajalle
+        /// pelin p‰‰ttymisest‰. Lis‰ksi kerrotaan montako mexicoa pelaaja on heitt‰nyt.
+        /// </summary>
         public void LopetaPeli()
         {
             Label loppu = new Label($"Peli P‰‰ttyi! Heitit {mexicot.Value} mexicoa!");
@@ -254,7 +309,7 @@ namespace RiskiMexico
         /// </summary>
         /// <param name="koko">Nopan sivun pituus</param>
         /// <param name="silmaluku">Nopan osoittama silmaluku</param>
-        /// <returns></returns>
+        /// <returns>Ohjelma palauttaa valmiin nopan</returns>
         public PhysicsObject LuoNoppa(int silmaluku, double x, double y)
         {
             int koko = 100;
@@ -360,9 +415,6 @@ namespace RiskiMexico
             silma.X = x;
             silma.Y = y;
             return silma;
-        }
-
-        
+        }       
     } 
-
 }
