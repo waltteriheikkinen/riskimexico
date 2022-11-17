@@ -11,8 +11,16 @@ using System.Security.Cryptography.X509Certificates;
 
 namespace RiskiMexico
 {
+    //TODO: silmukka: https://tim.jyu.fi/answers/kurssit/tie/ohj1/2022s/demot/demo9?answerNumber=3&task=poistapisin&user=vewaheik
     public class RiskiMexico : PhysicsGame
     {
+        /// <summary>
+        /// noppa1 ja noppa2 kuvaavat noppia.
+        /// Osoitin on osa heittomittaria ja sen koordinaatti m‰‰ritt‰‰ heitolle parametreja.
+        /// Kaikki intmeterit ovat pelin k‰ytt‰mi‰ laskureita.
+        /// silmaluku1 ja silmaluku2 vaikuttavat pelin kulkuun.
+        /// viimeheitot ker‰‰ tietoa kaikista heitoista ja vaikuttaa pelin kulkuun
+        /// </summary>
         private PhysicsObject noppa1;
         private PhysicsObject noppa2;
         private PhysicsObject osoitin;
@@ -23,6 +31,12 @@ namespace RiskiMexico
         private int silmaluku1;
         private int silmaluku2;
         private List<string> viimeheitot = new List<string>();
+
+
+        /// <summary>
+        /// Ohjelmassa on aliohjelmakutsut ohjainten asettamiseen, laskureiden luomiseen sek‰
+        /// heittomittarin luomiseen.
+        /// </summary>
         public override void Begin()
         {
             Camera.ZoomToLevel();
