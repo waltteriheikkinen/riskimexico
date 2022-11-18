@@ -11,6 +11,13 @@ using System.Security.Cryptography.X509Certificates;
 
 namespace RiskiMexico
 {
+    /// @author  Waltteri Heikkinen
+    /// @version 18.11.2022
+    ///
+    /// <summary>
+    /// Ohjelma luo pelin, jossa heitet‰‰n noppaa ja juodaan shotteja. 
+    /// </summary>
+    
     //TODO: silmukka: https://tim.jyu.fi/answers/kurssit/tie/ohj1/2022s/demot/demo9?answerNumber=3&task=poistapisin&user=vewaheik
     public class RiskiMexico : PhysicsGame
     {
@@ -49,7 +56,7 @@ namespace RiskiMexico
         /// <summary>
         /// Aliohjelmassa luodaan asteittainen mittari nopan heittoa varten. 
         /// </summary>
-        public void LuoHeittoMittari()
+        private void LuoHeittoMittari()
         {
             LuoPalkki(0, Color.Lime);
             LuoPalkki(-100, Color.Yellow);
@@ -75,7 +82,7 @@ namespace RiskiMexico
         /// <param name="x"></param>
         /// <param name="vari"></param>
         /// <returns></returns>
-        public PhysicsObject LuoPalkki(double x, Color vari)
+        private PhysicsObject LuoPalkki(double x, Color vari)
         {
             PhysicsObject mittari = new PhysicsObject(100, 50);
             mittari.Y = Level.Bottom + 100;
@@ -90,7 +97,7 @@ namespace RiskiMexico
         /// <summary>
         /// Aliohjelmassa m‰‰ritell‰‰n pelin ohjaamiseen tarvittavat n‰pp‰imet.
         /// </summary>
-        public void AsetaOhjaimet()
+        private void AsetaOhjaimet()
         {
             Keyboard.Listen(Key.Escape, ButtonState.Pressed, ConfirmExit, "Lopeta peli");
             Keyboard.Listen(Key.F1, ButtonState.Pressed, ShowControlHelp, "N‰yt‰ ohjeet");
@@ -101,7 +108,7 @@ namespace RiskiMexico
         /// <summary>
         /// Aliohjelmassa luodaan pelin tarvitsemat laskurit.
         /// </summary>
-        public void LuoLaskurit()
+        private void LuoLaskurit()
         {
             mexicot = LuoPistelaskuri("Mexicot: ", Screen.Left + 1.0 / 4 * Screen.Width);
             heittoja = LuoPistelaskuri("Heittoja: ", 0);
@@ -116,7 +123,7 @@ namespace RiskiMexico
         /// <param name="otsikko">Teksti joka on pistelaskurissa</param>
         /// <param name="sijainti">Pistelaskurin sijainti</param>
         /// <returns>Palauttaa valmiin laskurin</returns>
-        public IntMeter LuoPistelaskuri(string otsikko, double sijainti)
+        private IntMeter LuoPistelaskuri(string otsikko, double sijainti)
         {
             IntMeter pistelaskuri = new IntMeter(0);
 
@@ -138,7 +145,7 @@ namespace RiskiMexico
         /// <summary>
         /// Aliohjelmassa luodaan nopat ja heitet‰‰n niit‰.
         /// </summary>
-        public void HeitaNoppaa()
+        private void HeitaNoppaa()
         {
             if (heitot.Value > 0)
             {
@@ -182,7 +189,7 @@ namespace RiskiMexico
         /// Jos jakovirherangaistuksen ehdot t‰yttyv‰t, siirryt‰‰n jakovirherankku aliohjelmaan.
         /// Jos jakovirheit‰ ei ole tullut, siirryt‰‰n p‰ivitt‰m‰‰n laskurit.
         /// </summary>
-        public void NopatPysahtynyt()
+        private void NopatPysahtynyt()
         {
             int vanhatjakovirheet = jakovirheet.Value;
             if (noppa1.X < Screen.Left - 20 || noppa1.Y > Screen.Top + 20 || noppa1.Y < Screen.Bottom - 20)
@@ -201,7 +208,7 @@ namespace RiskiMexico
         /// <summary>
         /// Aliohjelmassa luodaan n‰ytˆlle teksti, joka ohjeistaa suorittamaan jakovirherangaistuksen.
         /// </summary>
-        public void JakovirheRankku()
+        private void JakovirheRankku()
         {
             jakovirheet.Value = jakovirheet.Value - 3;
             Label rankku = new Label("Jakovirheet t‰ynn‰! Suorita rangaistus.");
@@ -216,7 +223,7 @@ namespace RiskiMexico
         /// <summary>
         /// Aliohjelmassa p‰ivitet‰‰n peliss‰ tarvittavien laskurien arvot.
         /// </summary>
-        public void PaivitaLaskurit()
+        private void PaivitaLaskurit()
         {
             
             if (silmaluku1 >= silmaluku2)
@@ -276,7 +283,7 @@ namespace RiskiMexico
         /// <param name="voima">Kuinka kovaa noppaa heitet‰‰n</param>
         /// <param name="tuurimin">Satunnaisesti luodun vektorin pienin mahdollinen arvo</param>
         /// <param name="tuurimax">Satunnaisesti luodun vektorin suurin mahdollinen arvo</param>
-        public void LyoNoppaa(int voima, int tuurimin, int tuurimax)
+        private void LyoNoppaa(int voima, int tuurimin, int tuurimax)
         {
             noppa1.Hit(new Vector(voima, 0));
             noppa2.Hit(new Vector(voima, 0));
@@ -291,7 +298,7 @@ namespace RiskiMexico
         /// miksi pelaaja joutuu juomaan shotin.
         /// </summary>
         /// <param name="tapahtuma">Syy shotin juomiseen</param>
-        public void MexicoTuuletus(string tapahtuma)
+        private void MexicoTuuletus(string tapahtuma)
         {
             mexicot.Value++;
             Label arriva = new Label($"ARRIVAA! {tapahtuma} Juo shotti :)");
@@ -307,7 +314,7 @@ namespace RiskiMexico
         /// Aliohjelmassa nollataan laskurit ja kerrotaan pelaajalle
         /// pelin p‰‰ttymisest‰. Lis‰ksi kerrotaan montako mexicoa pelaaja on heitt‰nyt.
         /// </summary>
-        public void LopetaPeli()
+        private void LopetaPeli()
         {
             Label loppu = new Label($"Peli P‰‰ttyi! Heitit {mexicot.Value} mexicoa!");
             loppu.TextColor = Color.White;
@@ -318,13 +325,14 @@ namespace RiskiMexico
             jakovirheet.Value = 0;
         }
 
+
         /// <summary>
         /// Aliohjelmassa luodaan annettujen parametrien perusteella kaksi noppaa
         /// </summary>
         /// <param name="koko">Nopan sivun pituus</param>
         /// <param name="silmaluku">Nopan osoittama silmaluku</param>
         /// <returns>Ohjelma palauttaa valmiin nopan</returns>
-        public PhysicsObject LuoNoppa(int silmaluku, double x, double y)
+        private PhysicsObject LuoNoppa(int silmaluku, double x, double y)
         {
             int koko = 100;
             PhysicsObject noppa = new PhysicsObject(koko, koko, Shape.Rectangle);
@@ -421,7 +429,7 @@ namespace RiskiMexico
         /// </summary>
         /// <param name="koko">vakio joka m‰‰ritt‰‰ silm‰luvun muodostavien pallojen koon</param>
         /// <returns>palauttaa pallon</returns>
-        public PhysicsObject LuoSilma(int koko, double x, double y)
+        private PhysicsObject LuoSilma(int koko, double x, double y)
         {
             PhysicsObject silma = new PhysicsObject(koko / 5.0, koko / 5.0, Shape.Circle);
             silma.Color = Color.Red;
